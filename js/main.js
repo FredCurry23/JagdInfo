@@ -339,7 +339,7 @@ const huntInfo = {
     ],
   },
 };
-const sel = document.getElementById("stateSelect"),
+const sel = { value: "" },
   gsel = document.getElementById("globalState");
 Object.keys(profiles).forEach((n) => gsel.add(new Option(n, n)));
 const saved = localStorage.getItem("jagdState");
@@ -377,7 +377,7 @@ function showState() {
   document.getElementById("zeitenNotes").innerHTML = li(d.hinweise);
   document.getElementById("stateNotes").innerHTML = (d.hinweise || []).map((w) => "<li>" + w + "</li>").join("");
 }
-sel.addEventListener("change", () => setState(sel.value));
+
 showState();
 const observer = new IntersectionObserver(
   (entries) =>
@@ -402,9 +402,22 @@ function countUp(el) {
   }
   requestAnimationFrame(step);
 }
-document.getElementById("themeBtn").addEventListener("click", () => {
-  document.documentElement.classList.toggle("force-dark");
-  const dark = document.documentElement.classList.contains("force-dark");
+const themeBtn = document.getElementById("themeBtn"),
+  darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+function applyTheme(dark) {
+  document.documentElement.classList.toggle("force-dark", dark);
   document.documentElement.style.colorScheme = dark ? "dark" : "light";
-  document.getElementById("themeBtn").textContent = dark ? "☼ Helles Design" : "◐ Dunkles Design";
+  themeBtn.textContent = dark ? "☼ Helles Design" : "◐ Dunkles Design";
+}
+let savedTheme = null;
+try {
+  savedTheme = localStorage.getItem("jagdTheme");
+} catch (e) {}
+applyTheme(savedTheme ? savedTheme === "dark" : darkQuery.matches);
+themeBtn.addEventListener("click", () => {
+  const dark = !document.documentElement.classList.contains("force-dark");
+  applyTheme(dark);
+  try {
+    localStorage.setItem("jagdTheme", dark ? "dark" : "light");
+  } catch (e) {}
 });
