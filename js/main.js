@@ -383,9 +383,10 @@ function showState() {
 const compare = new Set();
 const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 function cell(r, cls) {
-  if (!r) return '<td class="none ' + cls + '">–</td>';
+  if (!r) return '<td class="none ' + cls + '">Nicht aufgeführt</td>';
   const none = r[1].toLowerCase() === "keine";
-  return '<td class="' + cls + (none ? " none" : "") + '">' + esc(r[1]) + (r[2] ? "<sup>" + esc(r[2]) + "</sup>" : "") + "</td>";
+  const value = none ? "Keine Jagdzeit" : r[1];
+  return '<td class="' + cls + (none ? " none" : "") + '">' + esc(value) + (r[2] ? "<sup>" + esc(r[2]) + "</sup>" : "") + "</td>";
 }
 function renderChips() {
   const box = document.getElementById("compareChips");
@@ -428,7 +429,7 @@ function renderZeiten() {
     .filter((n) => !q || n.toLowerCase().includes(q))
     .map((n) => {
       const rs = maps.map((m) => m.get(n));
-      const vals = rs.map((r) => (r ? r[1] : "–"));
+      const vals = rs.map((r) => (r ? (r[1].toLowerCase() === "keine" ? "Keine Jagdzeit" : r[1]) : "Nicht aufgeführt"));
       const differs = states.length > 1 && new Set(vals).size > 1;
       return (
         "<tr><td>" + esc(n) + "</td>" +
