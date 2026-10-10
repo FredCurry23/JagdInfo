@@ -372,7 +372,15 @@ function showState() {
   z.textContent = "Jagdzeiten " + sel.value + " im amtlichen Landesrecht prüfen ↗";
   renderZeiten();
   const d = huntInfo[sel.value] || {};
-  document.getElementById("stateGame").innerHTML = (d.wild || []).map((w) => "<li>" + w + "</li>").join("");
+  const common = ["Rehwild","Rotwild","Damwild","Schwarzwild","Muffelwild","Gamswild","Feldhase","Fuchs","Dachs","Waschbär","Marderhund","Wildkaninchen","Fasan","Stockente","Wildgänse","Ringeltaube","Rabenkrähe"];
+  const open = new Set();
+  jagdzeiten[sel.value].rows.forEach((r) => {
+    if (r[1].toLowerCase() !== "keine") open.add(r[0].replace(/ \(.*/, ""));
+  });
+  const gameList = common.filter((n) => open.has(n) || (n === "Wildgänse" && (open.has("Graugans") || open.has("Wildgans"))));
+  document.getElementById("stateGame").innerHTML = (gameList.length ? gameList : d.wild || [])
+    .map((w) => "<li>" + esc(w) + "</li>")
+    .join("");
   const li = (a) => (a || []).map((w) => "<li>" + w + "</li>").join("");
   document.getElementById("zeitenGame").innerHTML = li(d.wild);
   document.getElementById("zeitenNotes").innerHTML = li(d.hinweise);
