@@ -382,6 +382,34 @@ function showState() {
 
 const compare = new Set();
 const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const animalAliases = {
+  "Fuchs (Altfuchs)": "Fuchs (adult)",
+  "Fuchs (Füchse (adult))": "Fuchs (adult)",
+  "Fuchs (Jungfuchs)": "Fuchs (juvenil)",
+  "Fuchs (Jungfüchse)": "Fuchs (juvenil)",
+  Rabenkrähen: "Rabenkrähe",
+  Waschbären: "Waschbär",
+  Wildtruthähne: "Wildtruthuhn (Wildtruthahn)",
+  Wildtruthennen: "Wildtruthuhn (Wildtruthenne)",
+  "Wildtruthuhn (Wildtruthähne)": "Wildtruthuhn (Wildtruthahn)",
+  "Wildtruthuhn (Wildtruthennen)": "Wildtruthuhn (Wildtruthenne)",
+};
+const animalGroups = {
+  Wildgänse: new Set(["Blässgans", "Graugans", "Kanadagans", "Nilgans", "Nonnengans", "Ringelgans", "Saatgans", "Streifengans", "Waldsaatgans"]),
+  Wildenten: new Set(["Bergente", "Knäkente", "Krickente", "Löffelente", "Pfeifente", "Reiherente", "Samtente", "Schnatterente", "Spießente", "Stockente", "Tafelente", "Trauerente"]),
+  Möwen: new Set(["Heringsmöwe", "Lachmöwe", "Mantelmöwe", "Silbermöwe", "Sturmmöwe"]),
+  Wildtauben: new Set(["Ringeltaube", "Türkentaube"]),
+};
+function animalName(name) {
+  const cleaned = name.replace(/\s+\)/g, ")").replace(/\((Adult|Juvenil)\)/g, (_, age) => `(${age.toLowerCase()})`);
+  if (animalAliases[cleaned]) return animalAliases[cleaned];
+  const gooseName = cleaned.replace(/^Wildgans \(/, "Wildgänse (");
+  if (gooseName !== cleaned) return gooseName;
+  for (const [group, species] of Object.entries(animalGroups)) {
+    if (species.has(cleaned)) return `${group} (${cleaned})`;
+  }
+  return cleaned;
+}
 function cell(r, cls, notes) {
   if (!r) return '<td class="none ' + cls + '">Nicht aufgeführt</td>';
   const none = r[1].toLowerCase() === "keine";
@@ -413,16 +441,17 @@ function renderZeiten() {
   const q = (document.getElementById("ztFilter").value || "").trim().toLowerCase();
   const maps = states.map((s) => {
     const m = new Map();
-    jagdzeiten[s].rows.forEach((r) => m.set(r[0], r));
+    jagdzeiten[s].rows.forEach((r) => m.set(animalName(r[0]), r));
     return m;
   });
   const names = [];
   const seen = new Set();
   states.forEach((s) =>
     jagdzeiten[s].rows.forEach((r) => {
-      if (!seen.has(r[0])) {
-        seen.add(r[0]);
-        names.push(r[0]);
+      const name = animalName(r[0]);
+      if (!seen.has(name)) {
+        seen.add(name);
+        names.push(name);
       }
     }),
   );
