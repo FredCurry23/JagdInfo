@@ -166,8 +166,8 @@
             <h2>Jagdzeiten im<br />Überblick.</h2>
           </div>
           <p>
-            Bundesweite Regelzeiten nach der Jagdzeitenverordnung. Die Länder dürfen abweichen – verbindlich ist immer
-            die aktuelle Landesverordnung des jeweiligen Reviers.
+            Die Jagdzeiten des gewählten Bundeslandes laut Landesverordnung. Verbindlich ist immer die aktuelle
+            Landesverordnung des jeweiligen Reviers.
           </p>
         </div>
         <div class="state-box reveal">
@@ -179,67 +179,29 @@
           <ul class="infolist" id="zeitenNotes"></ul>
           <a class="source" id="zeitenLink" href="#" target="_blank" rel="noopener"></a>
         </div>
-        <h3 class="reveal">Bundesweite Regelzeiten</h3>
+        <div class="zt-toolbar reveal">
+          <h3>Jagdzeiten <span class="cur-state"></span></h3>
+          <div class="zt-actions">
+            <input type="search" id="ztFilter" class="zt-filter" placeholder="Tierart suchen …" aria-label="Tierart suchen" />
+            <button type="button" class="zt-btn" id="compareToggle" aria-expanded="false" aria-controls="comparePanel">
+              <span class="zt-btn-icon">⇄</span> <span id="compareLabel">Bundesländer vergleichen</span>
+            </button>
+          </div>
+        </div>
+        <div class="compare-panel" id="comparePanel" aria-hidden="true">
+          <div class="compare-inner">
+            <p>Wähle Bundesländer, die neben <strong class="cur-state"></strong> angezeigt werden sollen:</p>
+            <div class="chips" id="compareChips"></div>
+            <button type="button" class="zt-link" id="compareClear">Auswahl zurücksetzen</button>
+          </div>
+        </div>
         <div class="table-wrap reveal">
-          <table>
-            <thead>
-              <tr>
-                <th>Wildart</th>
-                <th>Bundesweite Jagdzeit</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Rehwild – Rehbock, Schmalreh</td>
-                <td>1. Mai – 15. Januar</td>
-              </tr>
-              <tr>
-                <td>Rehwild – Ricke, Kitz</td>
-                <td>1. September – 15. Januar</td>
-              </tr>
-              <tr>
-                <td>Rotwild – Hirsche, Alttiere, Kälber</td>
-                <td>1. August – 31. Januar</td>
-              </tr>
-              <tr>
-                <td>Damwild</td>
-                <td>1. September – 31. Januar</td>
-              </tr>
-              <tr>
-                <td>Schwarzwild – Keiler, Bachen</td>
-                <td>16. Juni – 31. Januar</td>
-              </tr>
-              <tr>
-                <td>Schwarzwild – Frischlinge, Überläufer</td>
-                <td>ganzjährig</td>
-              </tr>
-              <tr>
-                <td>Feldhase</td>
-                <td>1. Oktober – 15. Januar</td>
-              </tr>
-              <tr>
-                <td>Fasan (Hahn)</td>
-                <td>1. Oktober – 15. Januar</td>
-              </tr>
-              <tr>
-                <td>Stockente</td>
-                <td>1. September – 15. Januar</td>
-              </tr>
-              <tr>
-                <td>Ringeltaube</td>
-                <td>1. November – 20. Februar</td>
-              </tr>
-              <tr>
-                <td>Fuchs</td>
-                <td>16. Juni – 28. Februar (Jungfüchse vielerorts ganzjährig)</td>
-              </tr>
-              <tr>
-                <td>Dachs</td>
-                <td>1. August – 31. Oktober</td>
-              </tr>
-            </tbody>
+          <table class="zt" id="zeitenTable">
+            <thead id="zeitenHead"></thead>
+            <tbody id="zeitenBody"></tbody>
           </table>
         </div>
+        <div class="zt-notes" id="zeitenFootnotes"></div>
         <p class="note">
           Alle Angaben ohne Gewähr. Vor Jagdantritt in einem anderen Bundesland die dortige Verordnung, Schonzeiten und
           Reviervorgaben prüfen.
@@ -346,6 +308,7 @@
         </div>
       </div>
     </footer>
+    <script src="js/jagdzeiten-data.js"></script>
     <script src="js/main.js"></script>
   </body>
 </html>
