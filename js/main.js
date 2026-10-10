@@ -570,7 +570,6 @@ function applyTheme(dark) {
   document.documentElement.classList.toggle("force-dark", dark);
   document.documentElement.style.colorScheme = dark ? "dark" : "light";
   themeBtn.querySelector(".theme-icon").textContent = dark ? "☼" : "◐";
-  themeBtn.querySelector(".theme-label").textContent = dark ? "Helles Design" : "Dunkles Design";
 }
 let savedTheme = null;
 try {
