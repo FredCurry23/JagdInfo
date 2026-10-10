@@ -370,6 +370,7 @@ function showState() {
   const z = document.getElementById("zeitenLink");
   z.href = p[4];
   z.textContent = "Jagdzeiten " + sel.value + " im amtlichen Landesrecht prüfen ↗";
+  renderZeiten();
   const d = huntInfo[sel.value] || {};
   document.getElementById("stateGame").innerHTML = (d.wild || []).map((w) => "<li>" + w + "</li>").join("");
   const li = (a) => (a || []).map((w) => "<li>" + w + "</li>").join("");
@@ -377,6 +378,97 @@ function showState() {
   document.getElementById("zeitenNotes").innerHTML = li(d.hinweise);
   document.getElementById("stateNotes").innerHTML = (d.hinweise || []).map((w) => "<li>" + w + "</li>").join("");
 }
+
+const compare = new Set();
+const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+function cell(r, cls) {
+  if (!r) return '<td class="none ' + cls + '">–</td>';
+  const none = r[1].toLowerCase() === "keine";
+  return '<td class="' + cls + (none ? " none" : "") + '">' + esc(r[1]) + (r[2] ? "<sup>" + esc(r[2]) + "</sup>" : "") + "</td>";
+}
+function renderChips() {
+  const box = document.getElementById("compareChips");
+  box.innerHTML = Object.keys(jagdzeiten)
+    .map(
+      (n) =>
+        '<button type="button" class="chip' + (compare.has(n) ? " on" : "") + '" data-s="' + esc(n) + '"' +
+        (n === sel.value ? " disabled" : "") + ' aria-pressed="' + compare.has(n) + '">' + esc(n) + "</button>",
+    )
+    .join("");
+}
+let ztRendered = false;
+function renderZeiten() {
+  const cur = sel.value;
+  compare.delete(cur);
+  renderChips();
+  const states = [cur].concat([...compare]);
+  const q = (document.getElementById("ztFilter").value || "").trim().toLowerCase();
+  const maps = states.map((s) => {
+    const m = new Map();
+    jagdzeiten[s].rows.forEach((r) => m.set(r[0], r));
+    return m;
+  });
+  const names = [];
+  const seen = new Set();
+  states.forEach((s) =>
+    jagdzeiten[s].rows.forEach((r) => {
+      if (!seen.has(r[0])) {
+        seen.add(r[0]);
+        names.push(r[0]);
+      }
+    }),
+  );
+  names.sort((a, b) => a.localeCompare(b, "de"));
+  document.getElementById("zeitenHead").innerHTML =
+    "<tr><th>Tierart</th>" +
+    states.map((s, i) => '<th class="' + (i ? "colnew" : "col-main") + '">' + esc(s) + "</th>").join("") +
+    "</tr>";
+  document.getElementById("zeitenBody").innerHTML = names
+    .filter((n) => !q || n.toLowerCase().includes(q))
+    .map((n) => {
+      const rs = maps.map((m) => m.get(n));
+      const vals = rs.map((r) => (r ? r[1] : "–"));
+      const differs = states.length > 1 && new Set(vals).size > 1;
+      return (
+        "<tr><td>" + esc(n) + "</td>" +
+        rs.map((r, i) => cell(r, (i ? "colnew" : "") + (differs && i ? " diff" : ""))).join("") +
+        "</tr>"
+      );
+    })
+    .join("");
+  document.getElementById("zeitenFootnotes").innerHTML = states
+    .filter((s) => Object.keys(jagdzeiten[s].notes).length)
+    .map(
+      (s, i) =>
+        "<details" + (i === 0 ? " open" : "") + "><summary>Anmerkungen " + esc(s) + "</summary><ol>" +
+        Object.entries(jagdzeiten[s].notes)
+          .map(([k, v]) => '<li value="' + esc(k) + '">' + esc(v) + "</li>")
+          .join("") +
+        "</ol></details>",
+    )
+    .join("");
+}
+document.getElementById("compareChips").addEventListener("click", (e) => {
+  const b = e.target.closest(".chip");
+  if (!b) return;
+  const n = b.dataset.s;
+  compare.has(n) ? compare.delete(n) : compare.add(n);
+  renderZeiten();
+});
+document.getElementById("compareClear").addEventListener("click", () => {
+  compare.clear();
+  renderZeiten();
+});
+document.getElementById("ztFilter").addEventListener("input", renderZeiten);
+document.getElementById("compareToggle").addEventListener("click", (e) => {
+  const btn = e.currentTarget,
+    panel = document.getElementById("comparePanel"),
+    open = !panel.classList.contains("open");
+  panel.classList.toggle("open", open);
+  panel.setAttribute("aria-hidden", String(!open));
+  btn.setAttribute("aria-expanded", String(open));
+  document.getElementById("compareLabel").textContent = open ? "Vergleich ausblenden" : "Bundesländer vergleichen";
+});
 
 showState();
 const observer = new IntersectionObserver(
