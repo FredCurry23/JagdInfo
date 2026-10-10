@@ -4,28 +4,29 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#17271f" />
-    <title>Waffenrecht | Jagd Info</title>
+    <title>Waffenrecht | Jagd Infos</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
     <header class="topbar">
       <nav class="wrap">
-        <a class="brand" href="index.html">JAGD <span>INFO</span></a>
-        <div class="navlinks">
+        <a class="brand" href="index.html">JAGD <span>INFOS</span></a>
+        <div class="navlinks" id="siteNavLinks">
           <a href="grundlagen.html">Grundlagen</a><a href="bundeslaender.html">Bundesländer</a
           ><a href="jagdzeiten.html">Jagdzeiten</a><a href="waffenrecht.html" aria-current="page">Waffenrecht</a>
         </div>
+        <button class="mobile-menu-toggle" id="menuBtn" type="button" aria-expanded="false" aria-controls="siteNavLinks">Menü</button>
         <label class="global-state"
           ><span>Ich jage in</span
           ><select id="globalState" aria-label="Bundesland wählen"></select></label
-        ><button class="theme" id="themeBtn" aria-label="Farbschema wechseln">◐ Darstellung</button>
+        ><button class="theme" id="themeBtn" aria-label="Farbschema wechseln"><span class="theme-icon" aria-hidden="true">◐</span><span class="theme-label">Darstellung</span></button>
       </nav>
     </header>
     <main>
       <section class="section wrap" id="waffenrecht">
         <div class="section-head reveal">
           <div>
-            <div class="eyebrow">04 / Waffenrecht</div>
+            <div class="eyebrow">Waffenrecht</div>
             <h2>Erlaubnis ist nicht<br />gleich Freibrief.</h2>
           </div>
           <p>
@@ -104,7 +105,7 @@
     <footer class="footer">
       <div class="wrap footer-inner">
         <div>
-          <a class="brand" href="index.html">JAGD <span>INFO</span></a>
+          <a class="brand" href="index.html">JAGD <span>INFOS</span></a>
           <p>Orientierung für verantwortungsvolle Jagd. Sachlich erklärt, mit Verweisen auf amtliche Rechtsquellen.</p>
         </div>
         <div>

@@ -71,6 +71,9 @@ nav {
   gap: 24px;
   align-items: center;
 }
+.mobile-menu-toggle {
+  display: none;
+}
 .navlinks a {
   text-decoration: none;
   color: var(--muted);
@@ -456,7 +459,55 @@ tbody tr:last-child td {
   outline-offset: 3px;
 }
 @media (max-width: 760px) {
+  nav {
+    position: relative;
+    height: auto;
+    min-height: 76px;
+    flex-wrap: wrap;
+  }
+  .brand {
+    font-size: 1.15rem;
+  }
+  .mobile-menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 6px 9px;
+    background: var(--paper);
+    color: var(--ink);
+    font: inherit;
+    cursor: pointer;
+  }
   .navlinks {
+    display: none;
+  }
+  .navlinks.open {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 8px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+  }
+  .navlinks a {
+    padding: 10px 8px;
+  }
+  .theme {
+    padding: 6px 8px;
+    font-size: 0.85rem;
+    line-height: 1;
+  }
+  .theme-label {
     display: none;
   }
   .hero {
@@ -555,7 +606,11 @@ tbody tr:last-child td {
     display: none;
   }
   nav {
-    gap: 8px;
+    gap: 6px;
+  }
+  .global-state select {
+    max-width: 88px;
+    padding: 6px 7px;
   }
 }
 
