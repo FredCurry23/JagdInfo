@@ -374,6 +374,9 @@ function showState() {
   document.getElementById("stateGame").innerHTML = (d.wild || []).map((w) => "<li>" + w + "</li>").join("");
   const li = (a) => (a || []).map((w) => "<li>" + w + "</li>").join("");
   document.getElementById("zeitenGame").innerHTML = li(d.wild);
+  document.getElementById("zeitenTable").innerHTML = (jagdzeiten[sel.value] || [])
+    .map((r) => "<tr><td>" + r[0] + "</td><td>" + r[1] + "</td></tr>")
+    .join("");
   document.getElementById("zeitenNotes").innerHTML = li(d.hinweise);
   document.getElementById("stateNotes").innerHTML = (d.hinweise || []).map((w) => "<li>" + w + "</li>").join("");
 }

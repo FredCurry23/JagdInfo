@@ -166,8 +166,8 @@
             <h2>Jagdzeiten im<br />Überblick.</h2>
           </div>
           <p>
-            Bundesweite Regelzeiten nach der Jagdzeitenverordnung. Die Länder dürfen abweichen – verbindlich ist immer
-            die aktuelle Landesverordnung des jeweiligen Reviers.
+            Jagdzeiten für das ausgewählte Bundesland (Stand 1. Oktober 2026, Quelle: schonzeiten.de). Verbindlich ist immer
+            die aktuelle Landesverordnung des jeweiligen Reviers. „keine“ bedeutet: keine Jagdzeit (ganzjährige Schonzeit).
           </p>
         </div>
         <div class="state-box reveal">
@@ -179,65 +179,16 @@
           <ul class="infolist" id="zeitenNotes"></ul>
           <a class="source" id="zeitenLink" href="#" target="_blank" rel="noopener"></a>
         </div>
-        <h3 class="reveal">Bundesweite Regelzeiten</h3>
+        <h3 class="reveal">Jagdzeiten <span class="cur-state"></span> 2026</h3>
         <div class="table-wrap reveal">
           <table>
             <thead>
               <tr>
-                <th>Wildart</th>
-                <th>Bundesweite Jagdzeit</th>
+                <th>Tierart</th>
+                <th>Jagdzeit</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>Rehwild – Rehbock, Schmalreh</td>
-                <td>1. Mai – 15. Januar</td>
-              </tr>
-              <tr>
-                <td>Rehwild – Ricke, Kitz</td>
-                <td>1. September – 15. Januar</td>
-              </tr>
-              <tr>
-                <td>Rotwild – Hirsche, Alttiere, Kälber</td>
-                <td>1. August – 31. Januar</td>
-              </tr>
-              <tr>
-                <td>Damwild</td>
-                <td>1. September – 31. Januar</td>
-              </tr>
-              <tr>
-                <td>Schwarzwild – Keiler, Bachen</td>
-                <td>16. Juni – 31. Januar</td>
-              </tr>
-              <tr>
-                <td>Schwarzwild – Frischlinge, Überläufer</td>
-                <td>ganzjährig</td>
-              </tr>
-              <tr>
-                <td>Feldhase</td>
-                <td>1. Oktober – 15. Januar</td>
-              </tr>
-              <tr>
-                <td>Fasan (Hahn)</td>
-                <td>1. Oktober – 15. Januar</td>
-              </tr>
-              <tr>
-                <td>Stockente</td>
-                <td>1. September – 15. Januar</td>
-              </tr>
-              <tr>
-                <td>Ringeltaube</td>
-                <td>1. November – 20. Februar</td>
-              </tr>
-              <tr>
-                <td>Fuchs</td>
-                <td>16. Juni – 28. Februar (Jungfüchse vielerorts ganzjährig)</td>
-              </tr>
-              <tr>
-                <td>Dachs</td>
-                <td>1. August – 31. Oktober</td>
-              </tr>
-            </tbody>
+            <tbody id="zeitenTable"></tbody>
           </table>
         </div>
         <p class="note">
@@ -346,6 +297,7 @@
         </div>
       </div>
     </footer>
+    <script src="js/jagdzeiten.js"></script>
     <script src="js/main.js"></script>
   </body>
 </html>
