@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#17271f" />
+    <title>Bundesländer | Jagd Info</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <nav class="wrap">
+        <a class="brand" href="index.html">JAGD <span>INFO</span></a>
+        <div class="navlinks">
+          <a href="grundlagen.html">Grundlagen</a><a href="bundeslaender.html" aria-current="page">Bundesländer</a
+          ><a href="jagdzeiten.html">Jagdzeiten</a><a href="waffenrecht.html">Waffenrecht</a>
+        </div>
+        <label class="global-state"
+          ><span>Ich jage in</span
+          ><select id="globalState" aria-label="Bundesland wählen"></select></label
+        ><button class="theme" id="themeBtn" aria-label="Farbschema wechseln">◐ Darstellung</button>
+      </nav>
+    </header>
+    <main>
+      <section class="section state-area" id="bundeslaender">
+        <div class="wrap">
+          <div class="section-head reveal">
+            <div>
+              <div class="eyebrow">02 / Länder im Vergleich</div>
+              <h2>Ein Land. 16 Regelwerke.</h2>
+            </div>
+            <p>
+              Das gewählte Bundesland (oben in der Leiste) bestimmt die Orientierung. Die konkreten Vorschriften können sich ändern; vor der
+              Jagdausübung immer die aktuelle amtliche Fassung prüfen.
+            </p>
+          </div>
+          <div class="state-layout reveal">
+            <div class="state-picker">
+              <div class="note">
+                Wichtig: Ein Jagdschein allein erlaubt nicht automatisch jede Jagd. Revierberechtigung, Jagdzeit,
+                Artenschutz, Waffenrecht und örtliche Beschränkungen müssen ebenfalls passen.
+              </div>
+              <p class="note">Das Bundesland wählst du oben in der Navigationsleiste unter „Ich jage in“.</p>
+            </div>
+            <div class="state-result" aria-live="polite">
+              <div class="tag">Landesprofil</div>
+              <h3 id="stateTitle">Baden-Württemberg</h3>
+              <p id="stateDesc"></p>
+              <div class="pillrow" id="statePills"></div>
+              <p id="stateFocus"></p>
+              <h4>Gängigste jagdbare Tiere</h4>
+              <ul class="infolist" id="stateGame"></ul>
+              <h4>Besonderheiten bei Jagdzeiten &amp; Regeln</h4>
+              <ul class="infolist" id="stateNotes"></ul>
+              <a class="source" id="stateLink" href="https://www.landesrecht-bw.de/" target="_blank" rel="noopener"
+                >Amtliches Landesrecht ↗</a
+              >
+            </div>
+          </div>
+          <div class="table-wrap reveal" style="margin-top: 34px">
+            <table>
+              <thead>
+                <tr>
+                  <th>Regelungsbereich</th>
+                  <th>Was zwischen Ländern variieren kann</th>
+                  <th>Was du prüfen solltest</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Jagd- und Schonzeiten</td>
+                  <td>Länder können Zeiten verkürzen, aufheben oder unter Voraussetzungen Ausnahmen regeln.</td>
+                  <td>Aktuelle Landesverordnung und Art</td>
+                </tr>
+                <tr>
+                  <td>Jagdbares Wild</td>
+                  <td>Zusätzliche landesrechtliche Arten und besondere Schutzregelungen.</td>
+                  <td>Art, Gebiet und Schutzstatus</td>
+                </tr>
+                <tr>
+                  <td>Revier & Abschuss</td>
+                  <td>Verfahrensdetails, Abschussplanung und Nachweise können landesrechtlich konkretisiert sein.</td>
+                  <td>Revier, Abschussplan, Meldepflichten</td>
+                </tr>
+                <tr>
+                  <td>Ausbildung & Prüfung</td>
+                  <td>Ausbildungsvorgaben, Organisation und Verwaltungsabläufe unterscheiden sich.</td>
+                  <td>Zuständige Jagdbehörde und Prüfungsordnung</td>
+                </tr>
+                <tr>
+                  <td>Jagdorganisation</td>
+                  <td>Landesspezifische Zuständigkeiten, Formulare und Ausführungsbestimmungen.</td>
+                  <td>Amtliche Landesportale</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="footer">
+      <div class="wrap footer-inner">
+        <div>
+          <a class="brand" href="index.html">JAGD <span>INFO</span></a>
+          <p>Orientierung für verantwortungsvolle Jagd. Sachlich erklärt, mit Verweisen auf amtliche Rechtsquellen.</p>
+        </div>
+        <div>
+          <strong>Amtliche Quellen</strong>
+          <p>
+            <a href="https://www.gesetze-im-internet.de/bjagdg/" target="_blank" rel="noopener">Bundesjagdgesetz</a
+            ><br /><a href="https://www.gesetze-im-internet.de/waffg_2002/" target="_blank" rel="noopener"
+              >Waffengesetz</a
+            ><br /><a
+              href="https://www.mlv.nrw.de/themen/jagd-und-fischerei/jagd/jagdrecht/"
+              target="_blank"
+              rel="noopener"
+              >Jagdrecht NRW – Beispiel Landesportal</a
+            >
+          </p>
+        </div>
+      </div>
+    </footer>
+    <script src="js/jagdzeiten-data.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

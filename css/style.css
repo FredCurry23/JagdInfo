@@ -79,6 +79,10 @@ nav {
 .navlinks a:hover {
   color: var(--ink);
 }
+.navlinks a[aria-current="page"] {
+  color: var(--ink);
+  font-weight: 700;
+}
 .theme {
   border: 1px solid var(--line);
   background: var(--paper);

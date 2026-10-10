@@ -356,37 +356,76 @@ function setState(n) {
 gsel.addEventListener("change", () => setState(gsel.value));
 function showState() {
   const p = profiles[sel.value];
-  document.getElementById("stateTitle").textContent = sel.value;
-  document.getElementById("stateDesc").textContent = p[2];
-  document.getElementById("statePills").innerHTML =
-    '<span class="pill">' + p[0] + '</span><span class="pill">' + p[1] + "</span>";
-  document.getElementById("stateFocus").textContent = p[3];
-  const a = document.getElementById("stateLink");
-  a.href = p[4];
-  a.textContent = "Amtliches Landesrecht öffnen ↗";
-  document.getElementById("heroState").textContent = "Angepasst für: " + sel.value;
+  if (document.getElementById("stateTitle")) {
+    document.getElementById("stateTitle").textContent = sel.value;
+    document.getElementById("stateDesc").textContent = p[2];
+    document.getElementById("statePills").innerHTML =
+      '<span class="pill">' + p[0] + '</span><span class="pill">' + p[1] + "</span>";
+    document.getElementById("stateFocus").textContent = p[3];
+    const a = document.getElementById("stateLink");
+    a.href = p[4];
+    a.textContent = "Amtliches Landesrecht öffnen ↗";
+  }
+  const heroState = document.getElementById("heroState");
+  if (heroState) heroState.textContent = "Angepasst für: " + sel.value;
   document.querySelectorAll(".cur-state").forEach((e) => (e.textContent = sel.value));
-  renderZeiten();
-  const d = huntInfo[sel.value] || {};
-  const common = ["Rehwild","Rotwild","Damwild","Schwarzwild","Muffelwild","Gamswild","Feldhase","Fuchs","Dachs","Waschbär","Marderhund","Wildkaninchen","Fasan","Stockente","Wildgänse","Ringeltaube","Rabenkrähe"];
-  const open = new Set();
-  jagdzeiten[sel.value].rows.forEach((r) => {
-    if (r[1].toLowerCase() !== "keine") open.add(r[0].replace(/ \(.*/, ""));
-  });
-  const gameList = common.filter((n) => open.has(n) || (n === "Wildgänse" && (open.has("Graugans") || open.has("Wildgans"))));
-  document.getElementById("stateGame").innerHTML = (gameList.length ? gameList : d.wild || [])
-    .map((w) => "<li>" + esc(w) + "</li>")
-    .join("");
-  document.getElementById("stateNotes").innerHTML = (d.hinweise || []).map((w) => "<li>" + w + "</li>").join("");
+  if (document.getElementById("zeitenTable")) renderZeiten();
+  if (document.getElementById("stateGame")) {
+    const d = huntInfo[sel.value] || {};
+    const common = ["Rehwild","Rotwild","Damwild","Schwarzwild","Muffelwild","Gamswild","Feldhase","Fuchs","Dachs","Waschbär","Marderhund","Wildkaninchen","Fasan","Stockente","Wildgänse","Ringeltaube","Rabenkrähe"];
+    const open = new Set();
+    jagdzeiten[sel.value].rows.forEach((r) => {
+      if (r[1].toLowerCase() !== "keine") open.add(r[0].replace(/ \(.*/, ""));
+    });
+    const gameList = common.filter((n) => open.has(n) || (n === "Wildgänse" && (open.has("Graugans") || open.has("Wildgans"))));
+    document.getElementById("stateGame").innerHTML = (gameList.length ? gameList : d.wild || [])
+      .map((w) => "<li>" + esc(w) + "</li>")
+      .join("");
+    document.getElementById("stateNotes").innerHTML = (d.hinweise || []).map((w) => "<li>" + w + "</li>").join("");
+  }
 }
 
 const compare = new Set();
 const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
-function cell(r, cls) {
+const animalAliases = {
+  "Fuchs (Altfuchs)": "Fuchs (adult)",
+  "Fuchs (Füchse (adult))": "Fuchs (adult)",
+  "Fuchs (Jungfuchs)": "Fuchs (juvenil)",
+  "Fuchs (Jungfüchse)": "Fuchs (juvenil)",
+  Rabenkrähen: "Rabenkrähe",
+  Waschbären: "Waschbär",
+  Wildtruthähne: "Wildtruthuhn (Wildtruthahn)",
+  Wildtruthennen: "Wildtruthuhn (Wildtruthenne)",
+  "Wildtruthuhn (Wildtruthähne)": "Wildtruthuhn (Wildtruthahn)",
+  "Wildtruthuhn (Wildtruthennen)": "Wildtruthuhn (Wildtruthenne)",
+};
+const animalGroups = {
+  Wildgänse: new Set(["Blässgans", "Graugans", "Kanadagans", "Nilgans", "Nonnengans", "Ringelgans", "Saatgans", "Streifengans", "Waldsaatgans"]),
+  Wildenten: new Set(["Bergente", "Knäkente", "Krickente", "Löffelente", "Pfeifente", "Reiherente", "Samtente", "Schnatterente", "Spießente", "Stockente", "Tafelente", "Trauerente"]),
+  Möwen: new Set(["Heringsmöwe", "Lachmöwe", "Mantelmöwe", "Silbermöwe", "Sturmmöwe"]),
+  Wildtauben: new Set(["Ringeltaube", "Türkentaube"]),
+};
+function animalName(name) {
+  const cleaned = name.replace(/\s+\)/g, ")").replace(/\((Adult|Juvenil)\)/g, (_, age) => `(${age.toLowerCase()})`);
+  if (animalAliases[cleaned]) return animalAliases[cleaned];
+  const gooseName = cleaned.replace(/^Wildgans \(/, "Wildgänse (");
+  if (gooseName !== cleaned) return gooseName;
+  for (const [group, species] of Object.entries(animalGroups)) {
+    if (species.has(cleaned)) return `${group} (${cleaned})`;
+  }
+  return cleaned;
+}
+function cell(r, cls, notes) {
   if (!r) return '<td class="none ' + cls + '">Nicht aufgeführt</td>';
   const none = r[1].toLowerCase() === "keine";
   const value = none ? "Keine Jagdzeit" : r[1];
-  return '<td class="' + cls + (none ? " none" : "") + '">' + esc(value) + (r[2] ? "<sup>" + esc(r[2]) + "</sup>" : "") + "</td>";
+  const note = r[2] && notes[r[2]];
+  const marker = r[2]
+    ? "<sup" +
+      (note ? ' title="' + esc(note) + '" tabindex="0" aria-label="Anmerkung ' + esc(r[2]) + ": " + esc(note) + '"' : "") +
+      ">" + esc(r[2]) + "</sup>"
+    : "";
+  return '<td class="' + cls + (none ? " none" : "") + '">' + esc(value) + marker + "</td>";
 }
 function renderChips() {
   const box = document.getElementById("compareChips");
@@ -407,16 +446,17 @@ function renderZeiten() {
   const q = (document.getElementById("ztFilter").value || "").trim().toLowerCase();
   const maps = states.map((s) => {
     const m = new Map();
-    jagdzeiten[s].rows.forEach((r) => m.set(r[0], r));
+    jagdzeiten[s].rows.forEach((r) => m.set(animalName(r[0]), r));
     return m;
   });
   const names = [];
   const seen = new Set();
   states.forEach((s) =>
     jagdzeiten[s].rows.forEach((r) => {
-      if (!seen.has(r[0])) {
-        seen.add(r[0]);
-        names.push(r[0]);
+      const name = animalName(r[0]);
+      if (!seen.has(name)) {
+        seen.add(name);
+        names.push(name);
       }
     }),
   );
@@ -433,7 +473,7 @@ function renderZeiten() {
       const differs = states.length > 1 && new Set(vals).size > 1;
       return (
         "<tr><td>" + esc(n) + "</td>" +
-        rs.map((r, i) => cell(r, (i ? "colnew" : "") + (differs && i ? " diff" : ""))).join("") +
+        rs.map((r, i) => cell(r, (i ? "colnew" : "") + (differs && i ? " diff" : ""), jagdzeiten[states[i]].notes)).join("") +
         "</tr>"
       );
     })
@@ -450,27 +490,30 @@ function renderZeiten() {
     )
     .join("");
 }
-document.getElementById("compareChips").addEventListener("click", (e) => {
-  const b = e.target.closest(".chip");
-  if (!b) return;
-  const n = b.dataset.s;
-  compare.has(n) ? compare.delete(n) : compare.add(n);
-  renderZeiten();
-});
-document.getElementById("compareClear").addEventListener("click", () => {
-  compare.clear();
-  renderZeiten();
-});
-document.getElementById("ztFilter").addEventListener("input", renderZeiten);
-document.getElementById("compareToggle").addEventListener("click", (e) => {
-  const btn = e.currentTarget,
-    panel = document.getElementById("comparePanel"),
-    open = !panel.classList.contains("open");
-  panel.classList.toggle("open", open);
-  panel.setAttribute("aria-hidden", String(!open));
-  btn.setAttribute("aria-expanded", String(open));
-  document.getElementById("compareLabel").textContent = open ? "Vergleich ausblenden" : "Bundesländer vergleichen";
-});
+const compareChips = document.getElementById("compareChips");
+if (compareChips) {
+  compareChips.addEventListener("click", (e) => {
+    const b = e.target.closest(".chip");
+    if (!b) return;
+    const n = b.dataset.s;
+    compare.has(n) ? compare.delete(n) : compare.add(n);
+    renderZeiten();
+  });
+  document.getElementById("compareClear").addEventListener("click", () => {
+    compare.clear();
+    renderZeiten();
+  });
+  document.getElementById("ztFilter").addEventListener("input", renderZeiten);
+  document.getElementById("compareToggle").addEventListener("click", (e) => {
+    const btn = e.currentTarget,
+      panel = document.getElementById("comparePanel"),
+      open = !panel.classList.contains("open");
+    panel.classList.toggle("open", open);
+    panel.setAttribute("aria-hidden", String(!open));
+    btn.setAttribute("aria-expanded", String(open));
+    document.getElementById("compareLabel").textContent = open ? "Vergleich ausblenden" : "Bundesländer vergleichen";
+  });
+}
 
 showState();
 const observer = new IntersectionObserver(
