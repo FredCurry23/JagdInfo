@@ -382,11 +382,17 @@ function showState() {
 
 const compare = new Set();
 const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
-function cell(r, cls) {
+function cell(r, cls, notes) {
   if (!r) return '<td class="none ' + cls + '">Nicht aufgeführt</td>';
   const none = r[1].toLowerCase() === "keine";
   const value = none ? "Keine Jagdzeit" : r[1];
-  return '<td class="' + cls + (none ? " none" : "") + '">' + esc(value) + (r[2] ? "<sup>" + esc(r[2]) + "</sup>" : "") + "</td>";
+  const note = r[2] && notes[r[2]];
+  const marker = r[2]
+    ? "<sup" +
+      (note ? ' title="' + esc(note) + '" tabindex="0" aria-label="Anmerkung ' + esc(r[2]) + ": " + esc(note) + '"' : "") +
+      ">" + esc(r[2]) + "</sup>"
+    : "";
+  return '<td class="' + cls + (none ? " none" : "") + '">' + esc(value) + marker + "</td>";
 }
 function renderChips() {
   const box = document.getElementById("compareChips");
@@ -433,7 +439,7 @@ function renderZeiten() {
       const differs = states.length > 1 && new Set(vals).size > 1;
       return (
         "<tr><td>" + esc(n) + "</td>" +
-        rs.map((r, i) => cell(r, (i ? "colnew" : "") + (differs && i ? " diff" : ""))).join("") +
+        rs.map((r, i) => cell(r, (i ? "colnew" : "") + (differs && i ? " diff" : ""), jagdzeiten[states[i]].notes)).join("") +
         "</tr>"
       );
     })
