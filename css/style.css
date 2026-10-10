@@ -71,8 +71,13 @@ nav {
   gap: 24px;
   align-items: center;
 }
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 .mobile-menu-toggle {
-  display: none;
+  display: none !important;
 }
 .navlinks a {
   text-decoration: none;
@@ -469,7 +474,9 @@ tbody tr:last-child td {
     font-size: 1.15rem;
   }
   .mobile-menu-toggle {
-    display: inline-flex;
+    display: inline-flex !important;
+    font-size: 1.3rem;
+    line-height: 1;
     align-items: center;
     justify-content: center;
     border: 1px solid var(--line);
