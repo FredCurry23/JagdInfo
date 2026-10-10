@@ -366,10 +366,6 @@ function showState() {
   a.textContent = "Amtliches Landesrecht öffnen ↗";
   document.getElementById("heroState").textContent = "Angepasst für: " + sel.value;
   document.querySelectorAll(".cur-state").forEach((e) => (e.textContent = sel.value));
-  document.getElementById("zeitenIntro").textContent = p[0] + " – " + p[3];
-  const z = document.getElementById("zeitenLink");
-  z.href = p[4];
-  z.textContent = "Jagdzeiten " + sel.value + " im amtlichen Landesrecht prüfen ↗";
   renderZeiten();
   const d = huntInfo[sel.value] || {};
   const common = ["Rehwild","Rotwild","Damwild","Schwarzwild","Muffelwild","Gamswild","Feldhase","Fuchs","Dachs","Waschbär","Marderhund","Wildkaninchen","Fasan","Stockente","Wildgänse","Ringeltaube","Rabenkrähe"];
