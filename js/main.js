@@ -390,7 +390,7 @@ const observer = new IntersectionObserver(
     }),
   { threshold: 0.18 },
 );
-document.querySelectorAll(".reveal,.stat strong[data-count]").forEach((el) => observer.observe(el));
+document.querySelectorAll(".reveal,.stat,.stat strong[data-count]").forEach((el) => observer.observe(el));
 function countUp(el) {
   const target = Number(el.dataset.count),
     duration = 850,
