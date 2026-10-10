@@ -1,4 +1,4 @@
-# JagdInfo
+# Jagd Infos
 
 Die Website besteht aus mehreren statischen HTML-Seiten. `index.html` ist die Startseite; Navigation, Styles und Skripte verwenden relative Pfade.
 

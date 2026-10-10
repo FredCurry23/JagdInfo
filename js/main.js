@@ -541,10 +541,26 @@ function countUp(el) {
 }
 const themeBtn = document.getElementById("themeBtn"),
   darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+const menuBtn = document.getElementById("menuBtn"),
+  navLinks = document.getElementById("siteNavLinks");
+if (menuBtn && navLinks) {
+  menuBtn.addEventListener("click", () => {
+    const expanded = menuBtn.getAttribute("aria-expanded") === "true";
+    menuBtn.setAttribute("aria-expanded", String(!expanded));
+    navLinks.classList.toggle("open", !expanded);
+  });
+  navLinks.addEventListener("click", (event) => {
+    if (event.target.closest("a")) {
+      menuBtn.setAttribute("aria-expanded", "false");
+      navLinks.classList.remove("open");
+    }
+  });
+}
 function applyTheme(dark) {
   document.documentElement.classList.toggle("force-dark", dark);
   document.documentElement.style.colorScheme = dark ? "dark" : "light";
-  themeBtn.textContent = dark ? "☼ Helles Design" : "◐ Dunkles Design";
+  themeBtn.querySelector(".theme-icon").textContent = dark ? "☼" : "◐";
+  themeBtn.querySelector(".theme-label").textContent = dark ? "Helles Design" : "Dunkles Design";
 }
 let savedTheme = null;
 try {
