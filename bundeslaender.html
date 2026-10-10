@@ -10,12 +10,14 @@
   <body>
     <header class="topbar">
       <nav class="wrap">
-        <a class="brand" href="index.html">JAGD <span>INFOS</span></a>
+        <div class="brand-group">
+          <button class="mobile-menu-toggle" id="menuBtn" type="button" aria-expanded="false" aria-controls="siteNavLinks" aria-label="Menü öffnen"><span aria-hidden="true">☰</span></button>
+          <a class="brand" href="index.html">JAGD <span>INFOS</span></a>
+        </div>
         <div class="navlinks" id="siteNavLinks">
           <a href="grundlagen.html">Grundlagen</a><a href="bundeslaender.html" aria-current="page">Bundesländer</a
           ><a href="jagdzeiten.html">Jagdzeiten</a><a href="waffenrecht.html">Waffenrecht</a>
         </div>
-        <button class="mobile-menu-toggle" id="menuBtn" type="button" aria-expanded="false" aria-controls="siteNavLinks">Menü</button>
         <label class="global-state"
           ><span>Ich jage in</span
           ><select id="globalState" aria-label="Bundesland wählen"></select></label

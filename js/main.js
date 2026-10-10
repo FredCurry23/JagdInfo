@@ -521,13 +521,23 @@ const observer = new IntersectionObserver(
     entries.forEach((e) => {
       if (e.isIntersecting) {
         e.target.classList.add("visible");
-        if (e.target.matches("[data-count]")) countUp(e.target);
+        if (e.target.matches("[data-count]") && !e.target.dataset.counted) {
+          e.target.dataset.counted = "1";
+          countUp(e.target);
+        }
         observer.unobserve(e.target);
       }
     }),
-  { threshold: 0.18 },
+  { threshold: 0, rootMargin: "0px 0px -6% 0px" },
 );
-document.querySelectorAll(".reveal,.stat,.stat strong[data-count]").forEach((el) => observer.observe(el));
+function observeReveals(root = document) {
+  root.querySelectorAll(".reveal:not(.visible),.stat:not(.visible),.stat strong[data-count]").forEach((el) => observer.observe(el));
+}
+observeReveals();
+window.addEventListener("pageshow", () => observeReveals());
+window.addEventListener("load", () => {
+  observeReveals();
+});
 function countUp(el) {
   const target = Number(el.dataset.count),
     duration = 850,
