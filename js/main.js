@@ -381,9 +381,6 @@ function showState() {
   document.getElementById("stateGame").innerHTML = (gameList.length ? gameList : d.wild || [])
     .map((w) => "<li>" + esc(w) + "</li>")
     .join("");
-  const li = (a) => (a || []).map((w) => "<li>" + w + "</li>").join("");
-  document.getElementById("zeitenGame").innerHTML = li(d.wild);
-  document.getElementById("zeitenNotes").innerHTML = li(d.hinweise);
   document.getElementById("stateNotes").innerHTML = (d.hinweise || []).map((w) => "<li>" + w + "</li>").join("");
 }
 
